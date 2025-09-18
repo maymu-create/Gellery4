@@ -31,7 +31,7 @@ textarea {
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
-  background:transparent; color:var(--card );
+  background:transparent; color:var(--accent );
   border:1px solid rgb(255, 255, 255);
 }
 .list-input { display:flex; gap:8px }
@@ -42,7 +42,7 @@ textarea {
 
 .calc { display:grid; grid-template-columns:1fr; gap:8px }
 .calc-screen {
-  background:#ff76b4; color:#ffffff; padding:12px; border-radius:8px;
+  background:#ffffff; color:#ff8cc0; padding:12px; border-radius:8px;
   font-size:20px; text-align:right;
 }
 .calc-buttons {
@@ -57,7 +57,7 @@ table { width:100%; border-collapse:collapse }
 th, td { padding:8px; border-bottom:1px solid #ff81c2; font-size:14px }
 th { color:var(--muted); text-align:left }
 .controls { display:flex; gap:8px; margin-bottom:8px }
-.controls input { flex:1; padding:8px; border:1px solid #ff82a8; border-radius:8px }
+.controls input { flex:1; padding:8px; border:1px solid #ffffff; border-radius:8px }
 .account-footer { margin-top:12px; display:flex; gap:8px; align-items:center }
 .account-footer .total { margin-left:auto; font-weight:600 }
 
