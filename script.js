@@ -1,90 +1,130 @@
-// 📝 Notes
-function addNote() {
-  const input = document.getElementById('noteInput');
-  const list = document.getElementById('noteList');
-  if (input.value.trim() !== "") {
-    const li = document.createElement('li');
-    li.textContent = input.value;
-    list.appendChild(li);
-    input.value = "";
+// Utilities
+const $ = id => document.getElementById(id);
+const saveToLS = (k,v) => localStorage.setItem('notebook:'+k, JSON.stringify(v));
+const loadFromLS = k => { try { return JSON.parse(localStorage.getItem('notebook:'+k)) } catch(e){return null} }
+
+// Notes
+let notes = loadFromLS('notes') || [];
+let currentNoteIndex = null;
+
+function renderNotesList() {
+  const list = $('notesList');
+  list.innerHTML = '';
+  notes.forEach((n, i) => {
+    const div = document.createElement('div');
+    div.textContent = n.title || `โน้ต ${i+1}`;
+    div.onclick = () => { currentNoteIndex = i; $('noteText').value = n.content; };
+    list.appendChild(div);
+  });
+}
+
+// สร้างโน้ตใหม่
+$('newNoteBtn').onclick = () => {
+  notes.push({title:`โน้ต ${notes.length+1}`, content:''});
+  currentNoteIndex = notes.length-1;
+  $('noteText').value = '';
+  saveToLS('notes', notes);
+  renderNotesList();
+}
+
+// บันทึกโน้ตปัจจุบัน
+$('saveNoteBtn').onclick = () => {
+  if(currentNoteIndex === null) return alert('เลือกโน้ตก่อนบันทึก');
+  notes[currentNoteIndex].content = $('noteText').value;
+  saveToLS('notes', notes);
+  renderNotesList();
+}
+
+renderNotesList();
+// To-Do
+let todos = loadFromLS('todos') || [];
+const todosEl = $('todos'), todoInput = $('todoInput');
+function renderTodos(){
+  todosEl.innerHTML='';
+  todos.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.className='todo-item'+(t.done?' completed':'');
+    const cb=document.createElement('input');
+    cb.type='checkbox'; cb.checked=t.done;
+    cb.onchange=()=>{ todos[i].done=cb.checked; saveToLS('todos',todos); renderTodos(); refreshSummary(); };
+    const text=document.createElement('div'); text.className='text'; text.textContent=t.text;
+    const edit=document.createElement('button'); edit.textContent='✎'; edit.className='btn ghost'; edit.onclick=()=>{ const v=prompt('แก้ไข',t.text); if(v){todos[i].text=v; saveToLS('todos',todos); renderTodos();}};
+    const del=document.createElement('button'); del.textContent='🗑'; del.className='btn ghost'; del.onclick=()=>{ if(confirm('ลบ?')){todos.splice(i,1); saveToLS('todos',todos); renderTodos(); refreshSummary();}};
+    div.append(cb,text,edit,del);
+    todosEl.appendChild(div);
+  })
+}
+function addTodo(text){ todos.unshift({text,done:false,created:Date.now()}); saveToLS('todos',todos); renderTodos(); refreshSummary(); }
+$('addTodo').onclick=()=>{ if(todoInput.value.trim()) addTodo(todoInput.value.trim()); todoInput.value=''; }
+todoInput.addEventListener('keypress', e=>{ if(e.key==='Enter'&&todoInput.value.trim()){ addTodo(todoInput.value.trim()); todoInput.value=''; } })
+renderTodos();
+
+// Calculator
+const calcScreen=$('calcScreen');
+let calcExp='', mem=loadFromLS('calc_mem')||0;
+function updateScreen(){ calcScreen.textContent=calcExp||'0' }
+document.querySelectorAll('#calcButtons button').forEach(b=>{
+  b.onclick=()=>{
+    const v=b.dataset.val, op=b.dataset.op;
+    if(v!==undefined){ calcExp+=v; updateScreen(); return }
+    if(op!==undefined){ calcExp+=op; updateScreen(); return }
+    if(b.id==='equals'){ try{ calcExp=String(Function('return '+calcExp)()); updateScreen(); }catch(e){alert('สูตรไม่ถูกต้อง')} }
+    if(b.id==='clear'){ calcExp=''; updateScreen(); }
+    if(b.id==='back'){ calcExp=calcExp.slice(0,-1); updateScreen(); }
+    if(b.id==='memSave'){ mem=parseFloat(calcExp||0); saveToLS('calc_mem',mem); alert('MS: '+mem); }
+    if(b.id==='memRecall'){ calcExp+=String(mem); updateScreen(); }
   }
+});
+updateScreen();
+
+// Accounting
+let accounts=loadFromLS('accounts')||[];
+const tbody=document.querySelector('#accountTable tbody');
+function renderAccounts(){
+  tbody.innerHTML=''; let balance=0;
+  accounts.forEach((r,i)=>{
+    balance+=(+r.income||0)-(+r.expense||0);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${new Date(r.date).toLocaleDateString()}</td>
+      <td>${r.desc}</td><td>${r.income}</td><td>${r.expense}</td>
+      <td>${balance.toFixed(2)}</td>
+      <td><button data-i=\"${i}\" class=\"btn ghost\">ลบ</button></td>`;
+    tbody.appendChild(tr);
+  });
+  $('totalAmount').textContent=balance.toFixed(2);
+  $('netBalance').textContent=balance.toFixed(2);
+  saveToLS('accounts',accounts);
+}
+$('addRow').onclick=()=>{
+  const desc=$('desc').value.trim(), income=parseFloat($('income').value)||0, expense=parseFloat($('expense').value)||0;
+  if(!desc) return alert('กรุณาใส่คำอธิบาย');
+  accounts.push({date:Date.now(),desc,income:income?income.toFixed(2):'',expense:expense?expense.toFixed(2):''});
+  $('desc').value=$('income').value=$('expense').value='';
+  renderAccounts();
+}
+tbody.onclick=e=>{ if(e.target.matches('button')){ accounts.splice(+e.target.dataset.i,1); renderAccounts(); } }
+renderAccounts();
+
+// Export
+function toCSV(rows){ return rows.map(r=>r.map(c=>`\"${String(c||'').replace(/\"/g,'\"\"')}\"`).join(',')).join('\\n') }
+$('exportCSV').onclick=()=>{
+  const rows=[['Date','Description','Income','Expense']].concat(accounts.map(r=>[new Date(r.date).toLocaleString(),r.desc,r.income,r.expense]));
+  const blob=new Blob([toCSV(rows)],{type:'text/csv'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='accounts.csv'; a.click();
+}
+$('exportAll').onclick=()=>{
+  const notes=loadFromLS('note')||'', todosSave=loadFromLS('todos')||[];
+  const rows=[['Notes'],[notes],[],['Todos','done?','text']].concat(todosSave.map(t=>[t.done?'YES':'NO',t.text]));
+  const blob=new Blob([toCSV(rows)],{type:'text/csv'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='notebook_export.csv'; a.click();
 }
 
-// ✅ To-Do
-function addTodo() {
-  const input = document.getElementById('todoInput');
-  const list = document.getElementById('todoList');
-  if (input.value.trim() !== "") {
-    const li = document.createElement('li');
-    li.textContent = input.value;
-    li.onclick = () => li.style.textDecoration = "line-through";
-    list.appendChild(li);
-    input.value = "";
-  }
-}
+// Clear
+$('clearAll').onclick=()=>{ if(confirm('ล้างทั้งหมด?')){ localStorage.clear(); location.reload(); } }
+$('clearAccounts').onclick=()=>{ if(confirm('ล้างบัญชี?')){ accounts=[]; renderAccounts(); } }
 
-// 📒 Account Table
-function addRecord() {
-  const date = document.getElementById('dateInput').value;
-  const desc = document.getElementById('descInput').value;
-  const income = document.getElementById('incomeInput').value;
-  const expense = document.getElementById('expenseInput').value;
-  if (date && desc) {
-    const table = document.getElementById('accountTable');
-    const row = table.insertRow();
-    row.insertCell(0).innerText = date;
-    row.insertCell(1).innerText = desc;
-    row.insertCell(2).innerText = income;
-    row.insertCell(3).innerText = expense;
-  }
-}
-
-// 🧮 Calculator
-let calcExp = "";
-
-function pressCalc(val) {
-  calcExp += val;
-  document.getElementById("calcDisplay").value = calcExp;
-}
-
-function calculate() {
-  try {
-    document.getElementById("calcDisplay").value = eval(calcExp);
-    calcExp = "";
-  } catch {
-    document.getElementById("calcDisplay").value = "Error";
-  }
-}
-
-function clearCalc() {
-  calcExp = "";
-  document.getElementById("calcDisplay").value = "";
-}
-
-// Toggle Popup
-function toggleCalculator() {
-  const popup = document.getElementById("calculatorPopup");
-  popup.style.display = popup.style.display === "block" ? "none" : "block";
-}
-
-// 🔹 Dragging Calculator
-let dragOffsetX, dragOffsetY;
-
-function dragStart(e) {
-  const popup = document.getElementById("calculatorPopup");
-  dragOffsetX = e.clientX - popup.offsetLeft;
-  dragOffsetY = e.clientY - popup.offsetTop;
-  document.onmousemove = dragMove;
-  document.onmouseup = dragEnd;
-}
-
-function dragMove(e) {
-  const popup = document.getElementById("calculatorPopup");
-  popup.style.left = (e.clientX - dragOffsetX) + "px";
-  popup.style.top = (e.clientY - dragOffsetY) + "px";
-}
-
-function dragEnd() {
-  document.onmousemove = null;
-  document.onmouseup = null;
-}
+// Summary
+function refreshSummary(){ $('todoCount').textContent=todos.filter(t=>!t.done).length }
+refreshSummary();

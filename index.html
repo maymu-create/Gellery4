@@ -1,67 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>My Notebook & Tools</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Notebook & Tools</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>สมุดโน้ต & To-Do</h1>
-    <button class="top-right" onclick="location.href='account.html'">เข้าสมุดบัญชี</button>
+    <body>
+  <!-- หน้าแรก -->
+  <section id="mainPage">
+    <h1>โน้ตและเครื่องมือ</h1>
+    <button id="goSummary" class="btn">ไปหน้าสรุปบัญชี</button>
+    <!-- โน้ต, To-Do, เครื่องคิดเลข -->
+  </section>
+
+  <!-- หน้าที่สอง -->
+  <section id="summaryPage" style="display:none">
+    <h1>สรุปบัญชีรายรับ-รายจ่าย</h1>
+    <table id="summaryTable">
+      <thead>
+        <tr><th>วันที่</th><th>คำอธิบาย</th><th>รายรับ</th><th>รายจ่าย</th><th>ยอดคงเหลือ</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="backMain" class="btn">กลับหน้าแรก</button>
+  </section>
+
+<script src="script.js"></script>
+</body>
   </header>
 
-  <main>
-    <!-- 📝 Notes -->
-    <section>
-      <h2>โน้ต</h2>
-      <textarea id="noteInput" placeholder="เขียนโน้ตที่นี่..."></textarea>
-      <button onclick="addNote()">เพิ่มโน้ต</button>
-      <ul id="noteList"></ul>
+  <main class="container">
+    <!-- Left: Notes & To-do -->
+    <section class="card">
+     <h2>โน้ต</h2>
+      <div class="notes-list" id="notesList"></div>
+      <button id="newNoteBtn" class="btn">สร้างโน้ตใหม่</button>
+      <textarea id="noteText" placeholder="เขียนโน้ตที่นี่..."></textarea>
+      <button id="saveNoteBtn" class="btn">บันทึกโน้ต</button>
     </section>
 
-    <!-- ✅ To-Do -->
-    <section>
-      <h2>รายการสิ่งที่ต้องทำ</h2>
-      <input id="todoInput" type="text" placeholder="เพิ่มรายการ...">
-      <button onclick="addTodo()">เพิ่ม</button>
-      <ul id="todoList"></ul>
+      <hr>
+
+      <h2>ลิสต์รายการ (To-Do)</h2>
+      <div class="list">
+        <div class="list-input">
+          <input id="todoInput" placeholder="พิมพ์แล้วกด Enter เพื่อเพิ่มรายการ" />
+          <button id="addTodo" class="btn">เพิ่ม</button>
+        </div>
+        <div id="todos"></div>
+      </div>
     </section>
+
+    <!-- Middle: Calculator -->
+    <section class="card">
+      <h2>เครื่องคิดเลข</h2>
+      <div class="calc">
+        <div id="calcScreen" class="calc-screen">0</div>
+        <div class="calc-buttons" id="calcButtons">
+          <button data-val="7">7</button>
+          <button data-val="8">8</button>
+          <button data-val="9">9</button>
+          <button data-op="/">÷</button>
+
+          <button data-val="4">4</button>
+          <button data-val="5">5</button>
+          <button data-val="6">6</button>
+          <button data-op="*">×</button>
+
+          <button data-val="1">1</button>
+          <button data-val="2">2</button>
+          <button data-val="3">3</button>
+          <button data-op="-">−</button>
+
+          <button data-val="0">0</button>
+          <button id="dot" data-val=".">.</button>
+          <button id="equals">=</button>
+          <button data-op="+">+</button>
+
+          <button id="clear" style="grid-column:span 2">C</button>
+          <button id="back">←</button>
+          <button id="memSave">MS</button>
+          <button id="memRecall">MR</button>
+        </div>
+      </div>
+
+      <hr>
+      <h2>สรุปด่วน</h2>
+      <div class="small">รายการคงเหลือ: <strong id="todoCount">0</strong></div>
+      <div class="small">ยอดเงินสุทธิ (บัญชี): <strong id="netBalance">0.00</strong></div>
+    </section>
+
+    <!-- Right: Accounting table -->
+    <aside class="card">
+      <h2>ตารางบัญชี (Income / Expense)</h2>
+      <div class="controls">
+        <input id="desc" placeholder="คำอธิบาย" />
+        <input id="income" placeholder="รายรับ" />
+        <input id="expense" placeholder="รายจ่าย" />
+        <button id="addRow" class="btn">เพิ่ม</button>
+      </div>
+      <div class="table-wrap">
+        <table id="accountTable">
+          <thead>
+            <tr><th>วันที่</th><th>คำอธิบาย</th><th>รายรับ</th><th>รายจ่าย</th><th>ยอดคงเหลือ</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="account-footer">
+        <button id="exportCSV" class="btn ghost">Export CSV</button>
+        <button id="clearAccounts" class="btn ghost">ล้างบัญชี</button>
+        <div class="total">Total: <span id="totalAmount">0.00</span></div>
+      </div>
+    </aside>
   </main>
 
-  <!-- 🧮 Calculator Popup -->
-  <div id="calculatorPopup" class="popup">
-    <div class="popup-header" onmousedown="dragStart(event)">
-      <span>เครื่องคิดเลข</span>
-      <button onclick="toggleCalculator()">✖</button>
-    </div>
-    <div class="popup-body">
-      <input type="text" id="calcDisplay" readonly>
-      <div class="calc-buttons">
-        <button onclick="pressCalc('7')">7</button>
-        <button onclick="pressCalc('8')">8</button>
-        <button onclick="pressCalc('9')">9</button>
-        <button onclick="pressCalc('/')">÷</button>
-        <button onclick="pressCalc('4')">4</button>
-        <button onclick="pressCalc('5')">5</button>
-        <button onclick="pressCalc('6')">6</button>
-        <button onclick="pressCalc('*')">×</button>
-        <button onclick="pressCalc('1')">1</button>
-        <button onclick="pressCalc('2')">2</button>
-        <button onclick="pressCalc('3')">3</button>
-        <button onclick="pressCalc('-')">−</button>
-        <button onclick="pressCalc('0')">0</button>
-        <button onclick="pressCalc('.')">.</button>
-        <button onclick="calculate()">=</button>
-        <button onclick="pressCalc('+')">+</button>
-        <button onclick="clearCalc()">C</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ปุ่มเปิดเครื่องคิดเลข -->
-  <button class="calc-toggle" onclick="toggleCalculator()">🧮 เปิดเครื่องคิดเลข</button>
-
+  <footer>สร้างด้วยเครื่องมือหน้าเดียว — ข้อมูลเก็บใน Local Storage ของเบราว์เซอร์</footer>
   <script src="script.js"></script>
 </body>
 </html>
