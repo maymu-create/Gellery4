@@ -1,5 +1,5 @@
 :root {
-  --bg:#ffb1d0; --card:#ffffff; --accent:hsl(340, 100%, 78%); --muted:#ffffff;
+  --bg:#ffb1d0; --card:#ffffff; --accent:hsl(340, 100%, 78%); --muted:#ff95b1;
 }
 * {
   box-sizing:border-box; font-family:Inter, system-ui, sans-serif;
@@ -18,7 +18,7 @@ header h1 { font-size:18px; margin:0 }
 }
 .card {
   background:var(--card); border-radius:12px; padding:14px;
-  box-shadow:0 6px 18px rgba(28,36,64,0.06);
+  box-shadow:0 6px 18px rgb(255, 153, 189);
 }
 .card h2 { margin:0 0 10px; font-size:15px }
 
@@ -36,7 +36,7 @@ textarea {
 }
 .list-input { display:flex; gap:8px }
 .list-input input { flex:1; padding:8px; border:1px solid #ddd; border-radius:8px }
-.todo-item { display:flex; align-items:center; gap:10px; padding:8px; border:1px solid #eee; border-radius:8px }
+.todo-item { display:flex; align-items:center; gap:10px; padding:8px; border:1px solid #ff809e; border-radius:8px }
 .todo-item.completed .text { opacity:0.5; text-decoration:line-through }
 .todo-item .text { flex:1 }
 
