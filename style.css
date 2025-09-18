@@ -27,7 +27,7 @@ textarea {
   padding:10px; font-size:14px;
 }
 .btn {
-  background:var(--accent); color:#ff6eaa; padding:8px 10px;
+  background:var(--card); color:#ff6eaa; padding:8px 10px;
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
