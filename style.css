@@ -31,8 +31,8 @@ textarea {
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
-  background:transparent; color:var(--accent);
-  border:1px solid rgb(255, 135, 189);
+  background:transparent; color:var(--accent );
+  border:1px solid rgb(255, 255, 255);
 }
 .list-input { display:flex; gap:8px }
 .list-input input { flex:1; padding:8px; border:1px solid #ff8cb4; border-radius:8px }
