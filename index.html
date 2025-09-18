@@ -8,28 +8,11 @@
 </head>
 <body>
   <header>
-    <h1>Mini Note</h1>
+    <h1>Notebook & Tools — โน้ต, ลิสต์, เครื่องคิดเลข, บัญชี</h1>
     <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-      <section id="mainPage">
-    <h1>โน้ตและเครื่องมือ</h1>
-    <button id="goSummary" class="btn">ไปหน้าสรุปบัญชี</button>
-    <!-- โน้ต, To-Do, เครื่องคิดเลข -->
-  </section>
-<!-- หน้าที่สอง -->
-  <section id="summaryPage" style="display:none">
-    <h1>สรุปบัญชีรายรับ-รายจ่าย</h1>
-    <table id="summaryTable">
-      <thead>
-        <tr><th>วันที่</th><th>คำอธิบาย</th><th>รายรับ</th><th>รายจ่าย</th><th>ยอดคงเหลือ</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <button id="backMain" class="btn">กลับหน้าแรก</button>
-  </section>
-
-<script src="script.js"></script>
-</body>
-
+      <button id="exportAll" class="btn ghost">Export CSV</button>
+      <button id="clearAll" class="btn ghost">ล้างทั้งหมด</button>
+      <span class="small">(ข้อมูลเก็บไว้ในเบราว์เซอร์)</span>
     </div>
   </header>
 
