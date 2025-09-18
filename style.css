@@ -9,7 +9,7 @@ body {
 }
 header {
   background:#ff91b9; padding:16px 20px; display:flex; align-items:center;
-  border-bottom:1px solid #eee;
+  border-bottom:1px solid #ff6aa8;
 }
 header h1 { font-size:18px; margin:0 }
 .container {
@@ -27,7 +27,7 @@ textarea {
   padding:10px; font-size:14px;
 }
 .btn {
-  background:var(--accent); color:#fff; padding:8px 10px;
+  background:var(--accent); color:#ff6eaa; padding:8px 10px;
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
