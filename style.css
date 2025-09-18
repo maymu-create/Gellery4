@@ -8,7 +8,7 @@ body {
   margin:0; background:var(--bg); color:#ff799d;
 }
 header {
-  background:#ff91b9; padding:16px 20px; display:flex; align-items:center;
+  background:#ffffff; padding:16px 20px; display:flex; align-items:center;
   border-bottom:1px solid #ff6aa8;
 }
 header h1 { font-size:18px; margin:0 }
