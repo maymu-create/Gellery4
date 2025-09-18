@@ -1,99 +1,90 @@
-// Helper
-const $ = id => document.getElementById(id);
-const saveToLS = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
-const loadFromLS = k=>JSON.parse(localStorage.getItem(k)||'null');
-
-// ================= Notes =================
-let notes = loadFromLS('notes') || [];
-let currentNoteIndex = null;
-
-function renderNotesList() {
-  const list = $('notesList');
-  list.innerHTML = '';
-  notes.forEach((n,i)=>{
-    const div = document.createElement('div');
-    div.textContent = n.title || `โน้ต ${i+1}`;
-    div.className = 'note-item';
-    div.onclick = ()=>{
-      currentNoteIndex = i;
-      $('noteText').value = n.content;
-    };
-    list.appendChild(div);
-  });
-}
-$('newNoteBtn').onclick=()=>{
-  notes.push({title:`โน้ต ${notes.length+1}`, content:''});
-  currentNoteIndex=notes.length-1;
-  $('noteText').value='';
-  saveToLS('notes',notes);
-  renderNotesList();
-};
-$('saveNoteBtn').onclick=()=>{
-  if(currentNoteIndex===null) return alert('เลือกโน้ตก่อน');
-  notes[currentNoteIndex].content=$('noteText').value;
-  saveToLS('notes',notes);
-  renderNotesList();
-};
-renderNotesList();
-
-// ================= To-Do =================
-let todos = loadFromLS('todos') || [];
-function renderTodos(){
-  const list=$('todoList'); list.innerHTML='';
-  todos.forEach((t,i)=>{
-    const li=document.createElement('li');
-    li.textContent=t;
-    const btn=document.createElement('button');
-    btn.textContent='ลบ';
-    btn.onclick=()=>{todos.splice(i,1); saveToLS('todos',todos); renderTodos();};
-    li.appendChild(btn);
+// 📝 Notes
+function addNote() {
+  const input = document.getElementById('noteInput');
+  const list = document.getElementById('noteList');
+  if (input.value.trim() !== "") {
+    const li = document.createElement('li');
+    li.textContent = input.value;
     list.appendChild(li);
-  });
-}
-$('addTodoBtn').onclick=()=>{
-  const val=$('todoInput').value.trim();
-  if(val){todos.push(val); saveToLS('todos',todos); $('todoInput').value=''; renderTodos();}
-};
-renderTodos();
-
-// ================= Summary Page =================
-const mainPage=$('mainPage'), summaryPage=$('summaryPage');
-$('goSummary').onclick=()=>{ mainPage.style.display='none'; summaryPage.style.display='block'; renderSummary(); };
-$('backMain').onclick=()=>{ summaryPage.style.display='none'; mainPage.style.display='block'; };
-
-function renderSummary(){
-  let accounts = loadFromLS('accounts')||[
-    {date:Date.now(), desc:'เริ่มต้น', income:1000, expense:0}
-  ];
-  const tbody=$('summaryTable').querySelector('tbody'); tbody.innerHTML='';
-  let balance=0;
-  accounts.forEach(r=>{
-    balance+=(+r.income||0)-(+r.expense||0);
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${new Date(r.date).toLocaleDateString()}</td>
-                  <td>${r.desc}</td>
-                  <td>${r.income}</td>
-                  <td>${r.expense}</td>
-                  <td>${balance.toFixed(2)}</td>`;
-    tbody.appendChild(tr);
-  });
+    input.value = "";
+  }
 }
 
-// ================= Calculator Modal =================
-const calcModal=$('calcModal'), openCalc=$('openCalc'), closeCalc=calcModal.querySelector('.close');
-openCalc.onclick=()=>{ calcModal.style.display='block'; }
-closeCalc.onclick=()=>{ calcModal.style.display='none'; }
-window.onclick=(e)=>{ if(e.target===calcModal) calcModal.style.display='none'; }
+// ✅ To-Do
+function addTodo() {
+  const input = document.getElementById('todoInput');
+  const list = document.getElementById('todoList');
+  if (input.value.trim() !== "") {
+    const li = document.createElement('li');
+    li.textContent = input.value;
+    li.onclick = () => li.style.textDecoration = "line-through";
+    list.appendChild(li);
+    input.value = "";
+  }
+}
 
-let calcExp='', calcScreen=$('calcScreen');
-function updateScreen(){ calcScreen.textContent=calcExp||'0'; }
-document.querySelectorAll('#calcButtons button').forEach(b=>{
-  b.onclick=()=>{
-    const v=b.dataset.val, op=b.dataset.op;
-    if(v!==undefined){calcExp+=v;updateScreen();return;}
-    if(op!==undefined){calcExp+=op;updateScreen();return;}
-    if(b.id==='equals'){ try{calcExp=String(Function('return '+calcExp)());}catch(e){alert('สูตรไม่ถูกต้อง');calcExp='';} updateScreen(); }
-    if(b.id==='clear'){calcExp='';updateScreen();}
-  };
-});
-updateScreen();
+// 📒 Account Table
+function addRecord() {
+  const date = document.getElementById('dateInput').value;
+  const desc = document.getElementById('descInput').value;
+  const income = document.getElementById('incomeInput').value;
+  const expense = document.getElementById('expenseInput').value;
+  if (date && desc) {
+    const table = document.getElementById('accountTable');
+    const row = table.insertRow();
+    row.insertCell(0).innerText = date;
+    row.insertCell(1).innerText = desc;
+    row.insertCell(2).innerText = income;
+    row.insertCell(3).innerText = expense;
+  }
+}
+
+// 🧮 Calculator
+let calcExp = "";
+
+function pressCalc(val) {
+  calcExp += val;
+  document.getElementById("calcDisplay").value = calcExp;
+}
+
+function calculate() {
+  try {
+    document.getElementById("calcDisplay").value = eval(calcExp);
+    calcExp = "";
+  } catch {
+    document.getElementById("calcDisplay").value = "Error";
+  }
+}
+
+function clearCalc() {
+  calcExp = "";
+  document.getElementById("calcDisplay").value = "";
+}
+
+// Toggle Popup
+function toggleCalculator() {
+  const popup = document.getElementById("calculatorPopup");
+  popup.style.display = popup.style.display === "block" ? "none" : "block";
+}
+
+// 🔹 Dragging Calculator
+let dragOffsetX, dragOffsetY;
+
+function dragStart(e) {
+  const popup = document.getElementById("calculatorPopup");
+  dragOffsetX = e.clientX - popup.offsetLeft;
+  dragOffsetY = e.clientY - popup.offsetTop;
+  document.onmousemove = dragMove;
+  document.onmouseup = dragEnd;
+}
+
+function dragMove(e) {
+  const popup = document.getElementById("calculatorPopup");
+  popup.style.left = (e.clientX - dragOffsetX) + "px";
+  popup.style.top = (e.clientY - dragOffsetY) + "px";
+}
+
+function dragEnd() {
+  document.onmousemove = null;
+  document.onmouseup = null;
+}

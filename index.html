@@ -2,85 +2,65 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>My Notes & Tools</title>
+  <title>My Notebook & Tools</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <h1>My Notes & Tools</h1>
-    <button id="goSummary" class="btn">ไปหน้าสรุปบัญชี</button>
+    <h1>สมุดโน้ต & To-Do</h1>
+    <button class="top-right" onclick="location.href='account.html'">เข้าสมุดบัญชี</button>
   </header>
 
-  <!-- Main Page -->
-  <section id="mainPage">
-    <!-- Notes -->
-    <div class="card">
+  <main>
+    <!-- 📝 Notes -->
+    <section>
       <h2>โน้ต</h2>
-      <div id="notesList" class="list"></div>
-      <button id="newNoteBtn" class="btn">สร้างโน้ตใหม่</button>
-      <textarea id="noteText" placeholder="เขียนโน้ตที่นี่..."></textarea>
-      <button id="saveNoteBtn" class="btn">บันทึกโน้ต</button>
-    </div>
+      <textarea id="noteInput" placeholder="เขียนโน้ตที่นี่..."></textarea>
+      <button onclick="addNote()">เพิ่มโน้ต</button>
+      <ul id="noteList"></ul>
+    </section>
 
-    <!-- To-Do -->
-    <div class="card">
-      <h2>รายการที่ต้องทำ</h2>
-      <input id="todoInput" placeholder="เพิ่มรายการใหม่...">
-      <button id="addTodoBtn" class="btn">เพิ่ม</button>
+    <!-- ✅ To-Do -->
+    <section>
+      <h2>รายการสิ่งที่ต้องทำ</h2>
+      <input id="todoInput" type="text" placeholder="เพิ่มรายการ...">
+      <button onclick="addTodo()">เพิ่ม</button>
       <ul id="todoList"></ul>
+    </section>
+  </main>
+
+  <!-- 🧮 Calculator Popup -->
+  <div id="calculatorPopup" class="popup">
+    <div class="popup-header" onmousedown="dragStart(event)">
+      <span>เครื่องคิดเลข</span>
+      <button onclick="toggleCalculator()">✖</button>
     </div>
-
-    <!-- Calculator popup -->
-    <div class="card">
-      <h2>เครื่องมือ</h2>
-      <button id="openCalc" class="btn">เปิดเครื่องคิดเลข</button>
-    </div>
-  </section>
-
-  <!-- Summary Page -->
-  <section id="summaryPage" style="display:none">
-    <h2>สรุปบัญชีรายรับ-รายจ่าย</h2>
-    <table id="summaryTable">
-      <thead>
-        <tr>
-          <th>วันที่</th>
-          <th>คำอธิบาย</th>
-          <th>รายรับ</th>
-          <th>รายจ่าย</th>
-          <th>ยอดคงเหลือ</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <button id="backMain" class="btn">กลับหน้าแรก</button>
-  </section>
-
-  <!-- Calculator Modal -->
-  <div id="calcModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="calcScreen" class="calc-screen">0</div>
-      <div id="calcButtons" class="calc-buttons">
-        <button data-val="7">7</button>
-        <button data-val="8">8</button>
-        <button data-val="9">9</button>
-        <button data-op="/">/</button>
-        <button data-val="4">4</button>
-        <button data-val="5">5</button>
-        <button data-val="6">6</button>
-        <button data-op="*">*</button>
-        <button data-val="1">1</button>
-        <button data-val="2">2</button>
-        <button data-val="3">3</button>
-        <button data-op="-">-</button>
-        <button data-val="0">0</button>
-        <button id="clear">C</button>
-        <button id="equals">=</button>
-        <button data-op="+">+</button>
+    <div class="popup-body">
+      <input type="text" id="calcDisplay" readonly>
+      <div class="calc-buttons">
+        <button onclick="pressCalc('7')">7</button>
+        <button onclick="pressCalc('8')">8</button>
+        <button onclick="pressCalc('9')">9</button>
+        <button onclick="pressCalc('/')">÷</button>
+        <button onclick="pressCalc('4')">4</button>
+        <button onclick="pressCalc('5')">5</button>
+        <button onclick="pressCalc('6')">6</button>
+        <button onclick="pressCalc('*')">×</button>
+        <button onclick="pressCalc('1')">1</button>
+        <button onclick="pressCalc('2')">2</button>
+        <button onclick="pressCalc('3')">3</button>
+        <button onclick="pressCalc('-')">−</button>
+        <button onclick="pressCalc('0')">0</button>
+        <button onclick="pressCalc('.')">.</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="pressCalc('+')">+</button>
+        <button onclick="clearCalc()">C</button>
       </div>
     </div>
   </div>
+
+  <!-- ปุ่มเปิดเครื่องคิดเลข -->
+  <button class="calc-toggle" onclick="toggleCalculator()">🧮 เปิดเครื่องคิดเลข</button>
 
   <script src="script.js"></script>
 </body>
