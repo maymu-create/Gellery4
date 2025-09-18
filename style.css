@@ -5,7 +5,7 @@
   box-sizing:border-box; font-family:Inter, system-ui, sans-serif;
 }
 body {
-  margin:0; background:var(--bg); color:#ff799d;
+  margin:0; background:var(--bg); color:#ffffff;
 }
 header {
   background:#ffffff; padding:16px 20px; display:flex; align-items:center;
