@@ -31,7 +31,7 @@ textarea {
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
-  background:transparent; color:var(--accent  );
+  background:transparent; color:var(--card  );
   border:1px solid rgb(255, 255, 255);
 }
 .list-input { display:flex; gap:8px }
