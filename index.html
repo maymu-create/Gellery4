@@ -8,15 +8,14 @@
 </head>
 <body>
   <header>
-    <body>
-  <!-- หน้าแรก -->
-  <section id="mainPage">
+    <h1>Mini Note</h1>
+    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+      <section id="mainPage">
     <h1>โน้ตและเครื่องมือ</h1>
     <button id="goSummary" class="btn">ไปหน้าสรุปบัญชี</button>
     <!-- โน้ต, To-Do, เครื่องคิดเลข -->
   </section>
-
-  <!-- หน้าที่สอง -->
+<!-- หน้าที่สอง -->
   <section id="summaryPage" style="display:none">
     <h1>สรุปบัญชีรายรับ-รายจ่าย</h1>
     <table id="summaryTable">
@@ -30,17 +29,22 @@
 
 <script src="script.js"></script>
 </body>
+
+    </div>
   </header>
 
   <main class="container">
     <!-- Left: Notes & To-do -->
     <section class="card">
-     <h2>โน้ต</h2>
-      <div class="notes-list" id="notesList"></div>
-      <button id="newNoteBtn" class="btn">สร้างโน้ตใหม่</button>
-      <textarea id="noteText" placeholder="เขียนโน้ตที่นี่..."></textarea>
-      <button id="saveNoteBtn" class="btn">บันทึกโน้ต</button>
-    </section>
+      <h2>โน้ต</h2>
+      <div class="notes-area">
+        <textarea id="noteText" placeholder="เขียนโน้ตที่นี่..."></textarea>
+        <div class="notes-actions">
+          <button id="saveNote" class="btn">บันทึกโน้ต</button>
+          <button id="newNote" class="btn ghost">โน้ตใหม่</button>
+          <div style="margin-left:auto;color:var(--muted);font-size:13px">บันทึกอัตโนมัติเมื่อแก้ไข</div>
+        </div>
+      </div>
 
       <hr>
 
