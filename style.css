@@ -27,7 +27,7 @@ textarea {
   padding:10px; font-size:14px;
 }
 .btn {
-  background:var(--accent); color:#ff6eaa; padding:8px 10px;
+  background:var(--accent); color:#ffffff; padding:8px 10px;
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
@@ -42,7 +42,7 @@ textarea {
 
 .calc { display:grid; grid-template-columns:1fr; gap:8px }
 .calc-screen {
-  background:#ffffff; color:#ff8cc0; padding:12px; border-radius:8px;
+  background:#ff94c3; color:#ffffff; padding:12px; border-radius:8px;
   font-size:20px; text-align:right;
 }
 .calc-buttons {
