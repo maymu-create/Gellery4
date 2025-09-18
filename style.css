@@ -27,11 +27,11 @@ textarea {
   padding:10px; font-size:14px;
 }
 .btn {
-  background:var(--accent); color:#ffffff; padding:8px 10px;
+  background:var(--card); color:#ff82a5; padding:8px 10px;
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
-  background:transparent; color:var(--card  );
+  background:transparent; color:var(--accent  );
   border:1px solid rgb(255, 255, 255);
 }
 .list-input { display:flex; gap:8px }
