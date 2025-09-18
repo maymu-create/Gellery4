@@ -23,7 +23,7 @@ header h1 { font-size:18px; margin:0 }
 .card h2 { margin:0 0 10px; font-size:15px }
 
 textarea {
-  width:100%; min-height:220px; border-radius:8px; border:1px solid #ddd;
+  width:100%; min-height:220px; border-radius:8px; border:1px solid #ff80aa;
   padding:10px; font-size:14px;
 }
 .btn {
@@ -31,18 +31,18 @@ textarea {
   border-radius:8px; border:none; cursor:pointer;
 }
 .btn.ghost {
-  background:transparent; color:var(--card);
+  background:transparent; color:var(--accent);
   border:1px solid rgb(255, 135, 189);
 }
 .list-input { display:flex; gap:8px }
-.list-input input { flex:1; padding:8px; border:1px solid #ddd; border-radius:8px }
+.list-input input { flex:1; padding:8px; border:1px solid #ff8cb4; border-radius:8px }
 .todo-item { display:flex; align-items:center; gap:10px; padding:8px; border:1px solid #ff809e; border-radius:8px }
 .todo-item.completed .text { opacity:0.5; text-decoration:line-through }
 .todo-item .text { flex:1 }
 
 .calc { display:grid; grid-template-columns:1fr; gap:8px }
 .calc-screen {
-  background:#ff76b4; color:#ff8dc2; padding:12px; border-radius:8px;
+  background:#ff76b4; color:#ffffff; padding:12px; border-radius:8px;
   font-size:20px; text-align:right;
 }
 .calc-buttons {
