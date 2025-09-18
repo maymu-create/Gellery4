@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Notebook & Tools</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Mini Note</h1>
+    <div style="margin-left:auto;display: flex;gap: 8px;align-items: center;"></div>
+    <button id="goSummary" class="btn">สมุดบัญชี</button>
+    </header>
+
+  <main class="container">
+    <!-- Left: Notes & To-do -->
+    <section class="card">
+      <h2>โน้ต</h2>
+      <div class="notes-list" id="notes-list"></div>
+        <textarea id="noteText" placeholder="เขียนโน้ตที่นี่..."></textarea>
+        <div class="notes-actions">
+          <button id="saveNote" class="btn">บันทึกโน้ต</button>
+          <button id="newNote" class="btn ghost">โน้ตใหม่</button>
+          <div style="margin-left:auto;color:var(--muted);font-size:13px">บันทึกอัตโนมัติเมื่อแก้ไข</div>
+        </div>
+      </div>
+
+      <hr>
+
+      <h2>ลิสต์รายการ (To-Do)</h2>
+      <div class="list">
+        <div class="list-input">
+          <input id="todoInput" placeholder="พิมพ์แล้วกด Enter เพื่อเพิ่มรายการ" />
+          <button id="addTodo" class="btn">เพิ่ม</button>
+        </div>
+        <div id="todos"></div>
+      </div>
+    </section>
+
+    <!-- Middle: Calculator -->
+    <section class="card">
+      <h2>เครื่องคิดเลข</h2>
+      <div class="calc">
+        <div id="calcScreen" class="calc-screen">0</div>
+        <div class="calc-buttons" id="calcButtons">
+          <button data-val="7">7</button>
+          <button data-val="8">8</button>
+          <button data-val="9">9</button>
+          <button data-op="/">÷</button>
+
+          <button data-val="4">4</button>
+          <button data-val="5">5</button>
+          <button data-val="6">6</button>
+          <button data-op="*">×</button>
+
+          <button data-val="1">1</button>
+          <button data-val="2">2</button>
+          <button data-val="3">3</button>
+          <button data-op="-">−</button>
+
+          <button data-val="0">0</button>
+          <button id="dot" data-val=".">.</button>
+          <button id="equals">=</button>
+          <button data-op="+">+</button>
+
+          <button id="clear" style="grid-column:span 2">C</button>
+          <button id="back">←</button>
+          <button id="memSave">MS</button>
+          <button id="memRecall">MR</button>
+        </div>
+      </div>
+
+      <hr>
+      <h2>สรุปด่วน</h2>
+      <div class="small">รายการคงเหลือ: <strong id="todoCount">0</strong></div>
+      <div class="small">ยอดเงินสุทธิ (บัญชี): <strong id="netBalance">0.00</strong></div>
+    </section>
+
+    <!-- Right: Accounting table -->
+    <aside class="card">
+      <h2>ตารางบัญชี (Income / Expense)</h2>
+      <div class="controls">
+        <input id="desc" placeholder="คำอธิบาย" />
+        <input id="income" placeholder="รายรับ" />
+        <input id="expense" placeholder="รายจ่าย" />
+        <button id="addRow" class="btn">เพิ่ม</button>
+      </div>
+      <div class="table-wrap">
+        <table id="accountTable">
+          <thead>
+            <tr><th>วันที่</th><th>คำอธิบาย</th><th>รายรับ</th><th>รายจ่าย</th><th>ยอดคงเหลือ</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="account-footer">
+        <button id="exportCSV" class="btn ghost">Export CSV</button>
+        <button id="clearAccounts" class="btn ghost">ล้างบัญชี</button>
+        <div class="total">Total: <span id="totalAmount">0.00</span></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>สร้างด้วยเครื่องมือหน้าเดียว — ข้อมูลเก็บใน Local Storage ของเบราว์เซอร์</footer>
+  <script src="script.js"></script>
+</body>
+</html>
